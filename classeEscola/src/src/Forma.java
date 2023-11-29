@@ -1,5 +1,5 @@
 package src;
-
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Forma {
@@ -38,9 +38,23 @@ public class Forma {
 		return chCurso;
 	}
 	public void setChCurso(int chCurso) {
-		System.out.print("Digite a carga hor�ria do curso: ");
-		chCurso = ler.nextInt();
-		this.chCurso = chCurso;
+		boolean saida;
+		
+		do {
+			try {
+				System.out.print("Digite a carga horaria do curso: ");
+				chCurso = ler.nextInt();
+				saida = true;
+				}
+				catch (InputMismatchException e) {
+				System.out.println("\nDigite somente numeros, por favor!\n");
+				saida = false;
+				ler.next();
+				}
+				finally {
+					this.chCurso = chCurso;
+				}
+			}while(!saida);
 	}
 	
 	public void cadastrarForma() {
@@ -55,7 +69,7 @@ public class Forma {
 		
 		System.out.println(  "   Titulo:" + getTitulo()
 							+"\n   Nome do Curso: " + getNomeCurso()
-							+"\n   Craga hor�ria: " + getChCurso());
+							+"\n   Carga hororia: " + getChCurso());
 
 	}
 	

@@ -6,6 +6,7 @@ public class Aluno extends Pessoafisica {
 	private byte ra;
 	private Curso curso;
 	private float mensalidade;	
+	
 
 	Scanner ler = new Scanner(System.in);
 
@@ -14,7 +15,7 @@ public class Aluno extends Pessoafisica {
 		this.curso = new Curso();
 	}
 
-	public Aluno(String CPF, String nome, String sexo, Endereco endereco, byte ra, Curso curso, float mensalidade) {
+	public Aluno(String CPF, String nome, Sexo sexo, Endereco endereco, byte ra, Curso curso, float mensalidade) {
 		super(nome, CPF, sexo, endereco);
 		this.ra = ra;
 		this.curso = curso;
@@ -25,21 +26,34 @@ public class Aluno extends Pessoafisica {
 		return mensalidade;
 	}
 
-	public void setRa(float mensalidade) {
-		System.out.print("Digite o valor da mensalidade: ");
-		mensalidade = ler.nextByte();
-		this.mensalidade = mensalidade;
-	}
+
+    public void setRa(float mensalidade) {
+            this.mensalidade = mensalidade;
+    }
 
 	public int getRa() {
 		return ra;
 	}
+	
+    public void setRa(byte ra) {
+		boolean saida;
+		
+		do {
+	        try {
+	            System.out.print("Digite o Registro Academico do aluno(a): ");
+	            ra = ler.nextByte();
+	            this.ra = ra;
+	            saida = true;
+	            
+	        } catch (java.util.InputMismatchException e) {
+	            System.out.println("\nDigite somente números, por favor!\n");
+	            saida = false;
+	            ler.next();
 
-	public void setRa(byte ra) {
-		System.out.print("Digite o Registro Academico do aluno(a): ");
-		ra = ler.nextByte();
-		this.ra = ra;
-	}
+	        }
+		}while(!saida);
+    }
+
 
 	public Curso getCurso() {
 		return curso;
@@ -51,7 +65,7 @@ public class Aluno extends Pessoafisica {
 	
 	public void cadastrarAluno() {
 
-		System.out.println("\n-- Cadastramento --");
+		System.out.println("\n-- Cadastramento Aluno --");
 		
 		setCpf(cpf);
 		setNome(nome);

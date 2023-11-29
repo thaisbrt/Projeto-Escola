@@ -1,21 +1,22 @@
 package src;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Curso {
+public class Curso implements Mensalidade{
 	
-	private String nome;
-	private String tipo;
+	private NomeCurso nome;
+	private int tipo;
 	private int ch;
 	private float duracao;
-	private float mensalidade;
+	private double mensalidade;
 	Scanner ler = new Scanner(System.in);
 	
 	public Curso() {
 
 	}
 	
-	public Curso(String nome, String tipo, int ch, float duracao, float mensalidade) {
+	public Curso(NomeCurso nome, int tipo, int ch, float duracao, float mensalidade) {
 		super();
 		this.nome = nome;
 		this.tipo = tipo;
@@ -24,67 +25,158 @@ public class Curso {
 		this.mensalidade = mensalidade;
 	}
 	
-	public String getNome() {
+	public NomeCurso getNome() {
 		return nome;
 	}
-	public void setNome(String nome) {
-		System.out.print("Digite o nome do curso: ");
-		nome = ler.nextLine();	
-		this.nome = nome;
+	
+	public void setNome(NomeCurso nome) {
+		boolean saida;
+		
+		do {
+			
+			try {
+					System.out.println("Digite o nome do curso: "
+					+ "(1- ADS) " 
+					+"(2- Ciencia da Computacao) "
+					+ "(3-Sistema da Informacao)");
+					byte opcNomeCurso = ler.nextByte();
+						switch (opcNomeCurso) {
+						case 1:
+							nome = NomeCurso.ADS;
+							saida = true;
+							break;
+						case 2:
+							nome = NomeCurso.COMPUTACAO;
+							saida = true;
+							break;
+						case 3:
+							nome = NomeCurso.SISINFO;
+							saida = true;
+							break;
+						default:
+							System.out.println("\n ...por favor, digite 1, 2 ou 3! ...\n");
+							saida = false;
+							break;
+						}
+				}
+				catch (InputMismatchException e) {
+					System.out.println("\nDigite somente numeros, por favor!\n");
+					
+					saida = false;
+					ler.next();
+				}
+				finally {
+					this.nome = nome;
+				}
+			
+			} while(saida != true);
+			
 	}
-	public String getTipo() {
+	public int getTipo() {
 		return tipo;
 	}
-	public void setTipo(String tipo) {
-		System.out.print("Digite o tipo do curso: ");
-		tipo = ler.nextLine();	
-		this.tipo = tipo;
+	
+	public void setTipo(int tipo) {
+		boolean saida;
+		
+		do {
+			try {
+				System.out.print("Digite o tipo do curso: (1 - Lincenciatura) "
+						+ "(2 - Tecnologo)"
+						+ " (3 - Bacharel) ");
+						tipo = ler.nextInt();
+						
+						if(tipo == 1 || tipo == 2 || tipo == 3) {
+							
+							saida = true;
+							break;
+						}else{
+							System.out.println("\n... por favor, digite 1, 2 ou 3...\n");
+							saida = false;
+						}
+				}
+				catch (InputMismatchException e) {
+					System.out.println("\nDigite somente numeros, por favor!\n");
+					saida = false;
+					ler.next();
+				}
+				finally {
+					this.tipo = tipo;
+				}
+			}
+		while(saida != true);
 	}
+
 	public int getCh() {
 		return ch;
 	}
-	public void setCh(int ch) {
-		System.out.print("Digite a carga hor�ria: ");
-		ch = ler.nextInt();	
-		this.ch = ch;
+	public void setCh(int tipo) {
+		
+		if(tipo == 1) {
+			ch = chTenologo;
+		}else if(tipo == 2) {
+			ch = chBacharelado;
+		}else {
+			ch = chLicenciatura;
+		}
 	}
 	public float getDuracao() {
 		return duracao;
 	}
 	public void setDuracao(float duracao) {
-		System.out.print("Digite o tipo do duracao: ");
-		duracao = ler.nextFloat();	
-		this.duracao = duracao;
+	boolean saida;
+			
+			do {
+				try {
+			System.out.print("Digite a do duracao: ");
+			duracao = ler.nextFloat();	
+			this.duracao = duracao;
+            saida = true;
+            } catch (java.util.InputMismatchException e) {
+	            System.out.println("\nDigite somente numeros, por favor!\n");
+	            saida = false;
+	            ler.next();
+
+	        }
+		}while(!saida);
+    
 	}
-	public float getMensalidade() {
-		return mensalidade;
-	}
-	public void setMensalidade(float mensalidade) {
-		System.out.print("Digite o valor da mensalidade: ");
-		mensalidade = ler.nextFloat();	
-		this.mensalidade = mensalidade;
-	}
+
 
 	public void cadastrarCurso() {
 
 		setNome(nome);	
 		setTipo(tipo);
-		setCh(ch);
+		setCh(tipo);
 		setDuracao(duracao);
-		setMensalidade(mensalidade);
+		CalculoMensalidade(tipo);
 	}
 	
 	public void dadosCurso() {
 		
 		System.out.println(  "   Nome:" + getNome()
-							+"\n   Tipo: " + getTipo()
-							+"\n   Ch: " + getCh()
+							+"\n   Tipo: " + (getTipo() == 1 ? "Licenciatura" : getTipo() == 2 ? "Tecnologo" : "Bacharelado")
+							+"\n   Carga Horaria: " + getCh()
 							+"\n   Duracao: " + getDuracao()
-							+"\n   Mensalidade: " + getMensalidade());
+							+"\n   Mensalidade: " + CalculoMensalidade(tipo));
 
 	}
 	
-	
-	
+
+
+	@Override
+	public double CalculoMensalidade(int tipo) {
+		
+		if(tipo == 1) {
+			mensalidade = licenciatura;
+		}
+		else if(tipo == 2) {
+			mensalidade = tecnologo;
+		}
+		else if(tipo == 3){
+			mensalidade = bacharelado;
+		}
+		return mensalidade;
+	}
 
 }
